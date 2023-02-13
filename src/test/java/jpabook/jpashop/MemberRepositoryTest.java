@@ -1,5 +1,8 @@
 package jpabook.jpashop;
 
+import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.repository.MemberRepository;
+import jpabook.jpashop.service.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -17,22 +20,24 @@ public class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    MemberService memberService;
 
     @Test
     @Transactional
     @Rollback(value = false)
-    public void memberTest() throws Exception {
+    public void memberTest(){
         //given
         Member member = new Member();
-        member.setUserName("memberA");
+        member.setName("memberA");
 
         //when
-        long saveId = memberRepository.save(member);
-        Member findMember = memberRepository.find(saveId);
+        long saveId = memberService.join(member);
+        Member findMember = memberRepository.findOne(saveId);
 
         //then
         Assertions.assertThat(findMember.getId()).isEqualTo(member.getId());
-        Assertions.assertThat(findMember.getUserName()).isEqualTo(member.getUserName());
+        Assertions.assertThat(findMember.getName()).isEqualTo(member.getName());
         Assertions.assertThat(findMember).isEqualTo(member);
     }
 }
