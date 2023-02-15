@@ -1,7 +1,9 @@
 package jpabook.jpashop.domain;
 
 import jpabook.jpashop.domain.item.Item;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +13,10 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter
 @Setter
+//생성자를 protected 로 지정하여 작성한 것과 같은 의미
+//해당 작업을 통해 의도하지 않은 방법(createOrderItem 사용이 아닌 생성자 사용)을 방지할 수 있다.
+//코드는 항상 제약하는 방향으로 작성하는 것을 지향할 것.
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
 
     @Id @GeneratedValue
