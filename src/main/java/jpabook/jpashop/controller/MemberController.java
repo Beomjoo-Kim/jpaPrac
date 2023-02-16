@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,5 +44,14 @@ public class MemberController {
 
         memberService.join(member);
         return "redirect:/";
+    }
+
+    @GetMapping("members")
+    public String list(Model model) {
+        //실무로 넘어가게 된다면, entity(Member)를 그대로 넘기기보다는, DTO 를 새로이 작성하여 넘기는 것이 바람직하다.
+        //api 를 작성할 때엔 *절대* entity 를 그대로 보내서는 안된다.
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return "members/memberList";
     }
 }
