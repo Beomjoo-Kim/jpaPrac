@@ -83,6 +83,6 @@ public class ItemController {
         //대신 다음과 같은 로직을 사용하는 것이 권장된다.
         UpdateItemDto updateItemDto = new UpdateItemDto(form.getName(), form.getPrice(), form.getStockQuantity());
         itemService.updateItem(itemId, updateItemDto);
-        return "redirect:items";
+        return "redirect:/items";
     }
 }
