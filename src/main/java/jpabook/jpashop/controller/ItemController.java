@@ -3,6 +3,7 @@ package jpabook.jpashop.controller;
 import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.service.ItemService;
+import jpabook.jpashop.service.UpdateItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,10 +66,11 @@ public class ItemController {
     }
 
     @PostMapping("items/{itemId}/edit")
-    public String updateItem(@ModelAttribute BookForm form) {
+    public String updateItem(@PathVariable Long itemId, @ModelAttribute BookForm form) {
         //해당 method 는 user 가 임의로 itemId 를 변경해서 보낼 시 다른 item 이 변경될 수 있다.
         //이러한 취약점을 방어하는 방법으로는, 해당 user 의 권한체크/session 에 해당 정보 저장 등이 있다.
-        Book book = new Book();
+        //merge 를 사용하기 때문에 아래의 로직은 지양해야한다.
+        /*Book book = new Book();
         book.setIsbn(form.getIsbn());
         book.setId(form.getId());
         book.setName(form.getName());
@@ -76,7 +78,11 @@ public class ItemController {
         book.setStockQuantity(form.getStockQuantity());
         book.setAuthor(form.getAuthor());
 
-        itemService.saveItem(book);
+        itemService.saveItem(book);*/
+
+        //대신 다음과 같은 로직을 사용하는 것이 권장된다.
+        UpdateItemDto updateItemDto = new UpdateItemDto(form.getName(), form.getPrice(), form.getStockQuantity());
+        itemService.updateItem(itemId, updateItemDto);
         return "redirect:items";
     }
 }
